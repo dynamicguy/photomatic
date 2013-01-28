@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block heading %}
+    Welcome  {{ user.first_name|default:"Not provided" }} {{ user.last_name|default:"Not provided" }}!
+    <a rel="nofollow" class="logout" href="/logout/">Logout</a>
+{% endblock %}
+
+{% block content %}
+    <hr/>
+    <h1>{{ photo.title }}</h1>
+    <p>{{ photo.description }}</p>
+    <p>Album: <a href="/albums/{{ album.id }}">{{ photo.album.title }}</a></p>
+    <hr/>
+{% endblock %}

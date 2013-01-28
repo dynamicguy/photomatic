@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block heading %}
+    Welcome  {{ user.first_name|default:"Not provided" }} {{ user.last_name|default:"Not provided" }}!
+    <a rel="nofollow" class="logout" href="/logout/">Logout</a>
+{% endblock %}
+
+{% block content %}
+    <hr/>
+    <h1>{{ album.title }}</h1>
+    <p>{{ album.description }}</p>
+    <p>({{ album.photo_set.count }}) photos</p>
+    <hr/>
+    <dl>
+        {% for photo in album.photo_set.all %}
+            <dt><a href="/photos/{{ photo.id }}/">{{ photo.title }}</a></dt>
+            <dd>{{ photo.description }}</dd>
+        {% endfor %}
+    </dl>
+{% endblock %}

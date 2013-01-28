@@ -1,29 +1,40 @@
 # Django settings for photomatic project.
+import os, sys
+from datetime import timedelta
+from os.path import abspath, dirname, basename, join
 import dj_database_url
+import djcelery
+
+try:
+    import social_auth
+except ImportError:
+    import sys
+
+    sys.path.insert(0, '..')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ROOT_PATH = abspath(dirname(dirname(__file__)))
+PROJECT_NAME = basename(ROOT_PATH)
+
 ADMINS = (
-# ('Your Name', 'your_email@example.com'),
-)
+    ('Nurul Ferdous', 'nurul@ferdo.us'),
+    )
 
 MANAGERS = ADMINS
 
+#DATABASES = {'default': dj_database_url.config()}
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'db.sqlite', # Or path to database file if using sqlite3.
+        'USER': '', # Not used with sqlite3.
+        'PASSWORD': '', # Not used with sqlite3.
+        'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '', # Set to empty string for default. Not used with sqlite3.
+    }
 }
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#        'NAME': '',                      # Or path to database file if using sqlite3.
-#        'USER': '',                      # Not used with sqlite3.
-#        'PASSWORD': '',                  # Not used with sqlite3.
-#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#    }
-#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -69,10 +80,11 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-# Put strings here, like "/home/html/static" or "C:/www/django/static".
-# Always use forward slashes, even on Windows.
-# Don't forget to use absolute paths, not relative paths.
-)
+    join(ROOT_PATH, 'static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    )
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -108,10 +120,11 @@ ROOT_URLCONF = 'photomatic.urls'
 WSGI_APPLICATION = 'photomatic.wsgi.application'
 
 TEMPLATE_DIRS = (
-# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-# Always use forward slashes, even on Windows.
-# Don't forget to use absolute paths, not relative paths.
-)
+    join(ROOT_PATH, 'templates'),
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -121,9 +134,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'kombu.transport.django',
+    'djcelery',
+    'social_auth',
+    'photomatic'
     )
 
 # A sample logging configuration. The only tangible logging
@@ -154,3 +171,54 @@ LOGGING = {
         },
     }
 }
+
+djcelery.setup_loader()
+CELERY_RESULT_BACKEND = "mongodb"
+CELERY_MONGODB_BACKEND_SETTINGS = {
+    "host": "127.0.0.1",
+    "port": '27017',
+    "database": "photomatic",
+    "taskmeta_collection": "my_taskmeta" # Collection name to use for task output
+}
+CELERYD_LOG_LEVEL = "INFO"
+CELERY_AMQP_TASK_RESULT_EXPIRES = 18000  # 5 hours.
+
+BROKER_BACKEND = "mongodb"
+BROKER_HOST = "localhost"
+BROKER_PORT = 27017
+BROKER_USER = ""
+BROKER_PASSWORD = ""
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_IMPORTS = ('photomatic.tasks',)
+CELERYBEAT_SCHEDULE = {
+    'runs-every-50-seconds': {
+        'task': 'photomatic.tasks.album_task',
+        'schedule': timedelta(seconds=50),
+        'args': None
+    },
+}
+
+CELERY_TIMEZONE = 'UTC'
+
+FACEBOOK_APP_ID = '497837306933727'
+FACEBOOK_API_SECRET = '78411ecbe57c188c9d56686f11f7f6ef'
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.contrib.messages.context_processors.messages',
+    'social_auth.context_processors.social_auth_by_type_backends',
+    )
+
+try:
+    from local_settings import *
+except:
+    pass

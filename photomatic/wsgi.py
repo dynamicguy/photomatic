@@ -14,7 +14,8 @@ framework.
 
 """
 import os
-
+import djcelery
+djcelery.setup_loader()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "photomatic.settings")
 
 # This application object is used by any WSGI server configured to use this

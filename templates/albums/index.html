@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block heading %}
+    Welcome  {{ user.first_name|default:"Not provided" }} {{ user.last_name|default:"Not provided" }}!
+    <a rel="nofollow" class="logout" href="/logout/">Logout</a>
+{% endblock %}
+
+{% block content %}
+    {% if latest_album_list %}
+        <hr/>
+        {% for album in latest_album_list %}
+            <h3><a href="/albums/{{ album.id }}/">{{ album.title }}</a></h3>
+            <p>{{ album.description }}</p>
+        {% endfor %}
+        <hr/>
+    {% else %}
+        <p>No albums are available.</p>
+    {% endif %}
+{% endblock %}
