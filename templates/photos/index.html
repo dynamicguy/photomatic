@@ -1,20 +1,45 @@
 {% extends "base.html" %}
 {% load url from future %}
 
+{% block script %}
+	$('.citem:first').addClass('active');
+	$('.carousel').carousel();
+{% endblock %}
+
 {% block heading %}
-    Welcome  {{ user.first_name|default:"Not provided" }} {{ user.last_name|default:"Not provided" }}!
-    <a rel="nofollow" class="logout" href="/logout/">Logout</a>
+	Welcome  {{ user.first_name|default:"Not provided" }} {{ user.last_name|default:"Not provided" }}!
+	<a rel="nofollow" class="logout" href="/logout/">Logout</a>
 {% endblock %}
 
 {% block content %}
-    {% if latest_photo_list %}
-        <hr/>
-        {% for photo in latest_photo_list %}
-            <h3><a href="/photos/{{ photo.id }}/">{{ photo.title }}</a></h3>
-            <p>{{ photo.description }}</p>
-        {% endfor %}
-        <hr/>
-    {% else %}
-        <p>No photos are available.</p>
-    {% endif %}
+
+	<div id="myCarousel" class="carousel slide">
+		<!-- Carousel items -->
+		<div class="carousel-inner">
+			{% if latest_photo_list %}
+				{% for photo in latest_photo_list %}
+					<div class="item citem">
+						<img src="{{ photo.file.url }}" class="img-polaroid"/>
+
+						<div class="carousel-caption">
+							<h4>{{ photo.title }}</h4>
+
+							<p>{{ photo.description }}</p>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="item citem">
+					<p>No photos are available.</p>
+				</div>
+			{% endif %}
+
+			<div class="active item">…</div>
+			<div class="item">…</div>
+			<div class="item">…</div>
+		</div>
+		<!-- Carousel nav -->
+		<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
 {% endblock %}

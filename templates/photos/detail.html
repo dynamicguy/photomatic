@@ -11,5 +11,6 @@
     <h1>{{ photo.title }}</h1>
     <p>{{ photo.description }}</p>
     <p>Album: <a href="/albums/{{ album.id }}">{{ photo.album.title }}</a></p>
+	<p><img src="{{ photo.file.url }}" class="img-polaroid" /> </p>
     <hr/>
 {% endblock %}
