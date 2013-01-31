@@ -8,6 +8,7 @@
   <ul>
   {% for name in social_auth.backends.oauth2 %}
     <li><a rel="nofollow" href="{% url "socialauth_begin" name %}">{{ name|title }}</a></li>
+    <li><a rel="nofollow" href="accounts/login/">Good old form</a></li>
   {% endfor %}
   </ul>
 </div>

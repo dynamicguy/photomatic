@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+	<div class="well">
+		<h2>Sign in at photomatic</h2>
+		{% if form.errors %}
+			<div class="alert alert-error">
+				<span>Your username and password didn't match. Please try again.</span>
+			</div>
+		{% endif %}
+
+		<form class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+			{% csrf_token %}
+			<div class="control-group">
+				<label class="control-label" for="inputEmail">{{ form.username.label_tag }}</label>
+
+				<div class="controls">
+					{{ form.username }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">{{ form.password.label_tag }}</label>
+
+				<div class="controls">
+					{{ form.password }}
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<label class="checkbox">
+						<input type="checkbox"> Remember me
+					</label>
+					<button type="submit" class="btn btn-primary">Sign in</button>
+				</div>
+			</div>
+			<input type="hidden" name="next" value="{{ next }}"/>
+		</form>
+	</div>
+{% endblock %}

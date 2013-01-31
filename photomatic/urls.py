@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
-# Uncomment the next two lines to enable the admin:
+
 from django.contrib import admin
 
 admin.autodiscover()
@@ -32,4 +32,5 @@ urlpatterns = patterns('',
     url(r'^albums/(?P<album_id>\d+)/$', album_detail, name='album_detail'),
     url(r'^photos/$', photos, name='photos'),
     url(r'^photos/(?P<photo_id>\d+)/$', photo_detail, name='photo_detail'),
-)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
