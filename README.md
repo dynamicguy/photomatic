@@ -1,7 +1,7 @@
 photomatic
 ==========
 an easy to setup django app for automating photo albums from facebook using the following tools:
-  - facebook python SDK
+	- facebook python SDK
 	- django
 	- [celery]
 	- postgresql
