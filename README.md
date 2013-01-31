@@ -1,18 +1,13 @@
-photomatic 
+photomatic
 ==========
-an easy to setup facebook app for automating photo albums
+an easy to setup django app for automating photo albums from facebook using the following tools:
+  - facebook python SDK
+	- django
+	- [celery]
+	- postgresql
+	- [Twitter Bootstrap] - great UI boilerplate for modern web apps
 
-## installation ##
-You can install this project as follows:
 
-  git clone git://github.com/dynamicguy/photomatic.git
-  cd photomatic
-  mkvirtualenv venv
-  pip install -r requirements.txt
-  
-  photomatic 
-==========
-an easy to setup facebook app for automating photo albums
 
 Installation
 --------------
@@ -35,3 +30,5 @@ MIT
 
   [john gruber]: http://dynamicguy.com/
   [1]: https://github.com/dynamicguy/photomatic/
+  [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
+  [celery]: http://celeryproject.org
