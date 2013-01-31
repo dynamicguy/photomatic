@@ -1,11 +1,12 @@
 photomatic
 ==========
 an easy to setup django app for automating photo albums from facebook using the following tools:
-	- facebook python SDK
-	- django
-	- [celery]
-	- postgresql
-	- [Twitter Bootstrap] - great UI boilerplate for modern web apps
+  - facebook python SDK
+  - [mongodb]
+  - django
+  - [celery]
+  - postgresql
+  - [Twitter Bootstrap] - great UI boilerplate for modern web apps
 
 
 
@@ -32,3 +33,4 @@ MIT
   [1]: https://github.com/dynamicguy/photomatic/
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
   [celery]: http://celeryproject.org
+  [mongodb]: http://mongodb.org
