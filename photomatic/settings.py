@@ -2,7 +2,7 @@
 import os, sys
 from datetime import timedelta
 from os.path import abspath, dirname, basename, join
-#import dj_database_url
+import dj_database_url
 import djcelery
 
 try:
@@ -12,7 +12,9 @@ except ImportError:
 
     sys.path.insert(0, '..')
 
-DEBUG = True
+ENV = (os.uname()[0] == 'Darwin') and 'development' or 'production'
+
+DEBUG = (ENV == "development") and True or False
 TEMPLATE_DEBUG = DEBUG
 
 ROOT_PATH = abspath(dirname(dirname(__file__)))
@@ -24,17 +26,20 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-#DATABASES = {'default': dj_database_url.config()}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'photomatic_development', # Or path to database file if using sqlite3.
-        'USER': 'ferdous', # Not used with sqlite3.
-        'PASSWORD': 'f', # Not used with sqlite3.
-        'HOST': 'localhost', # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432', # Set to empty string for default. Not used with sqlite3.
+if(ENV == "development"):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'photomatic_development',
+            'USER': 'ferdous',
+            'PASSWORD': 'f',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
     }
-}
+
+else:
+    DATABASES = {'default': dj_database_url.config()}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -142,6 +147,7 @@ INSTALLED_APPS = (
     'djcelery',
     'social_auth',
     'photomatic',
+    'fts',
     )
 
 # A sample logging configuration. The only tangible logging
